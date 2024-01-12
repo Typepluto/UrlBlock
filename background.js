@@ -1,5 +1,5 @@
 
-var startup_youtube_tabs_url;
+let startup_youtube_tabs_url;
 const forbiddenKeywords = ["youtube", "netflix", "disney"];
 
 const extractVideoId = (url) => {
@@ -13,9 +13,9 @@ const extractVideoId = (url) => {
     return match ? match[1] : null;
 }
 
-
-chrome.runtime.onStartup.addListener( async () => {
+const addListeners = async () => {
     const tabs = await chrome.tabs.query({});
+
     startup_youtube_tabs_url = tabs.reduce(
         (acc, curr) => {
             if(curr.url.includes("youtube") && curr.url != "https://www.youtube.com/") {
@@ -25,20 +25,28 @@ chrome.runtime.onStartup.addListener( async () => {
         },
         []
     );
-    console.log(startup_youtube_tabs_url);
-})
 
-chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
-    
-    const isPageForbidden = forbiddenKeywords.some((keyword) =>
-        tab.url.includes(keyword)
-    )
-    if(changeInfo.status == "loading" && isPageForbidden) {
-        // console.log(changeInfo);
-        if(!startup_youtube_tabs_url.includes(extractVideoId(tab.url))){
-            // console.log("go back", tab);
-            chrome.tabs.goBack(tabId);
-            // chrome.tabs.remove(tabId);
+    console.log(startup_youtube_tabs_url);
+
+    chrome.tabs.onUpdated.addListener(function (tabId, changeInfo, tab) {
+        
+        const isPageForbidden = forbiddenKeywords.some((keyword) =>
+            tab.url.includes(keyword)
+        )
+        if(changeInfo.status == "loading" && isPageForbidden) {
+            if(startup_youtube_tabs_url.includes(extractVideoId(tab.url))){
+                return null;
+            }
+            
+            chrome.tabs.goBack(tabId)
+            .catch((error) => {
+                console.log(error);
+                chrome.tabs.remove(tabId);
+            });
         }
-    }
-});
+    });
+
+    return null
+}
+
+addListeners();
