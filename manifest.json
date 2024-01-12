@@ -1,0 +1,17 @@
+{
+  "name": "Stop Wasting Time",
+  "description": "Go study!Stop wasting your time on some tabs!",
+  "version": "1.0.0",
+  "manifest_version": 3,
+  "background": {
+    "service_worker": "background.js"
+  },
+  "icons": {
+    "16": "./32x32.png",
+    "32": "./32x32.png",
+    "48": "./32x32.png",
+    "128": "./32x32.png"
+  },
+  "permissions": ["tabs", "webRequest", "declarativeNetRequest", "webNavigation"],
+  "host_permissions": ["http://*/*", "https://*/*"]
+}
