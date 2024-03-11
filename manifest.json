@@ -1,6 +1,6 @@
 {
-  "name": "Stop Wasting Time",
-  "description": "Go study!Stop wasting your time on some tabs!",
+  "name": "UrlBlock",
+  "description": "Go study!Stop wasting your time on some url!",
   "version": "1.0.0",
   "manifest_version": 3,
   "background": {
@@ -12,6 +12,6 @@
     "48": "./32x32.png",
     "128": "./32x32.png"
   },
-  "permissions": ["tabs", "webRequest", "declarativeNetRequest", "webNavigation"],
+  "permissions": ["tabs"],
   "host_permissions": ["http://*/*", "https://*/*"]
 }
